@@ -6,6 +6,7 @@ from trello import Board, List as Trellolist, Label, Card
 # misc imports
 from typing import NamedTuple, List
 
+
 class GetOAuthTokenResponse(NamedTuple):
     """Model to store response when retrieving user oauth tokens
 
@@ -16,6 +17,14 @@ class GetOAuthTokenResponse(NamedTuple):
     """
     token: str
     token_secret: str
+    status_code: int
+
+class AuthorizeResponse(NamedTuple):
+    """Model to store response on whether the user has provided authorization for the program
+
+    Attributes
+        status_code (int): success / error
+    """
     status_code: int
 
 class GetAllBoardsResponse(NamedTuple):
@@ -48,16 +57,6 @@ class GetAllListsResponse(NamedTuple):
     res: List[Trellolist]
     status_code: int
 
-class GetListResponse(NamedTuple):
-    """Model to store response when retrieving list
-
-    Attributes
-        res (Trellolist): trello list
-        status_code (int): success / error
-    """
-    res: Trellolist
-    status_code: int
-
 class GetAllLabelsResponse(NamedTuple):
     """Model to store response when retrieving all labels
 
@@ -68,41 +67,21 @@ class GetAllLabelsResponse(NamedTuple):
     res: List[Label]
     status_code: int
 
-class GetLabelResponse(NamedTuple):
-    """Model to store response when retrieving label
+class GetAllCardsResponse(NamedTuple):
+    """Model to store response when retrieving all cards
 
     Attributes
-        res (Label): label
+        res (Card): array of cards
         status_code (int): success / error
     """
-    res: Label
-    status_code: int
-
-class GetLabelResponse(NamedTuple):
-    """Model to store response when retrieving label
-
-    Attributes
-        res (Label): label
-        status_code (int): success / error
-    """
-    res: Label
+    res: List[Card]
     status_code: int
 
 class AddCardResponse(NamedTuple):
-    """Model to store response when adding a new card to a board
+    """Model to store response when adding a new card
 
     Attributes
-        res (Card): newly-added card
-        status_code (int): success / error
-    """
-    res: Card
-    status_code: int
-
-class AddCardResponse(NamedTuple):
-    """Model to store response when adding a new card to a board
-
-    Attributes
-        res (Card): newly-added card
+        res (Card): card
         status_code (int): success / error
     """
     res: Card
