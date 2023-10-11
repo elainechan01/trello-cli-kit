@@ -1,6 +1,6 @@
 [project]
-name = "trellocli"
-version = "0.1.0"
+name = "trello-cli-kit"
+version = "1.0.0"
 authors = [
 	{ name = "Elaine Chan", email = "elaineyunru.chan@gmail.com" }
 ]
