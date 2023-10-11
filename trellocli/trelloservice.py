@@ -1,6 +1,6 @@
 # module imports
 from trellocli import TRELLO_AUTHORIZATION_ERROR, TRELLO_READ_ERROR, TRELLO_WRITE_ERROR, SUCCESS
-from trellocli.models import *
+from trellocli.misc.models import *
 
 # dependencies imports
 from trello import TrelloClient, create_oauth_token
@@ -13,6 +13,7 @@ class TrelloService:
     """Class to implement the business logic needed to interact with Trello"""
     def __init__(self) -> None:
         self.__load_oauth_token_env_var()
+        load_dotenv()
         self.__client = TrelloClient(
             api_key=os.getenv("TRELLO_API_KEY"),
             api_secret=os.getenv("TRELLO_API_SECRET"),
@@ -20,7 +21,7 @@ class TrelloService:
         )
 
     def __load_oauth_token_env_var(self) -> None:
-        """Private method to store user's oauth token as an environment variable"""
+        """Private method to configure user's oauth token as an environment variable"""
         load_dotenv()
         if not os.getenv("TRELLO_OAUTH_TOKEN"):
             res = self.get_user_oauth_token()
@@ -33,7 +34,6 @@ class TrelloService:
                 )
             else:
                 print("User denied access.")
-                self.__load_oauth_token_env_var()
 
     def get_user_oauth_token(self) -> GetOAuthTokenResponse:
         """Method to retrieve user's oauth token
@@ -54,6 +54,24 @@ class TrelloService:
                 token_secret="",
                 status_code=TRELLO_AUTHORIZATION_ERROR
             )
+    
+    def authorize(self) -> AuthorizeResponse:
+        """Method to check if user authorized program
+        
+        Returns
+            AuthorizeResponse: success / error
+        """
+        self.__load_oauth_token_env_var()
+        load_dotenv()
+        if not os.getenv("TRELLO_OAUTH_TOKEN"):
+            return AuthorizeResponse(status_code=TRELLO_AUTHORIZATION_ERROR)
+        else:
+            self.__client = TrelloClient(
+                api_key=os.getenv("TRELLO_API_KEY"),
+                api_secret=os.getenv("TRELLO_API_SECRET"),
+                token=os.getenv("TRELLO_OAUTH_TOKEN")
+            )
+            return AuthorizeResponse(status_code=SUCCESS)
 
     def get_all_boards(self) -> GetAllBoardsResponse:
         """Method to list all boards from user's account
@@ -115,28 +133,6 @@ class TrelloService:
                 status_code=TRELLO_READ_ERROR
             )
 
-    def get_list(self, board: Board, list_id: str) -> GetListResponse:
-        """Method to retrieve list (column) from the trello board
-
-        Required Args
-            board (Board): trello board
-            list_id (str): list id
-
-        Returns
-            GetListResponse: trello list
-        """
-        try:
-            res = board.get_list(list_id=list_id)
-            return GetListResponse(
-                res=res,
-                status_code=SUCCESS
-            )
-        except:
-            return GetListResponse(
-                res=None,
-                status_code=TRELLO_READ_ERROR
-            )
-
     def get_all_labels(self, board: Board) -> GetAllLabelsResponse:
         """Method to list all labels from the trello board
 
@@ -158,24 +154,23 @@ class TrelloService:
                 status_code=TRELLO_READ_ERROR
             )
 
-    def get_label(self, board: Board, label_id: str) -> GetLabelResponse:
-        """Method to retrieve label from the trello board
+    def get_all_cards(self, trellolist: Trellolist) -> GetAllCardsResponse:
+        """Method to list all cards from a trellolist
 
         Required Args
-            board (Board): trello board
-            label_id (str): label id
+            trellolist (Trellolist): trellolist
 
         Returns
-            GetLabelResponse: label
+            GetAllCardsResponse: array of trello cards
         """
         try:
-            res = board.get_label(label_id=label_id)
-            return GetLabelResponse(
+            res = trellolist.list_cards()
+            return GetAllCardsResponse(
                 res=res,
                 status_code=SUCCESS
             )
         except:
-            return GetLabelResponse(
+            return GetAllCardsResponse(
                 res=None,
                 status_code=TRELLO_READ_ERROR
             )
@@ -219,3 +214,8 @@ class TrelloService:
                 res=new_card,
                 status_code=TRELLO_WRITE_ERROR
             )
+
+
+
+# singleton instance
+trellojob = TrelloService()
