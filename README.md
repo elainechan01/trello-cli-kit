@@ -1,12 +1,9 @@
-# trello-cli-kit
-
 # Overview
-CLI program to modify your Trello boards from your computer's command line
+Trello board management program via the command line
 
 # Getting Started
 1. Install the package: `pip install trello-cli-kit`
-2. Install dependencies: `pip install -r requirements.txt`
-3. Retrieve your `Trello API Key` and `Trello API Secret` (How to get API key and secret from Trello: [Guide](https://developer.atlassian.com/cloud/trello/guides/rest-api/api-introduction/)) and store them as environment variables as such:
+2. Retrieve your `Trello API Key` and `Trello API Secret` (How to get API key and secret from Trello: [Guide](https://developer.atlassian.com/cloud/trello/guides/rest-api/api-introduction/)) and store them as environment variables as such:
     ```
     # .env
 
@@ -15,14 +12,57 @@ CLI program to modify your Trello boards from your computer's command line
     ```
 
 # Usage
-1. General usage
-`trellocli GROUP | COMMAND`
-2. Initializing configurations
-`trellocli config COMMAND`
-3. Display data from trello board
-`trellocli list [--is-detailed][--board-name=<BOARD_NAME>]`
-4. Add a new card to a trello board
-`trellocli create card [--board-name=<BOARD_NAME>]`
+
+## General Usage
+```
+trellocli GROUP | COMMAND
+
+FLAGS
+    --help: display help text for command
+```
+
+## Commands
+### config
+```
+trellocli config
+
+COMMANDS
+    access: authorize program to trello account
+    board: configure board to use
+```
+
+### list
+```
+trellocli list
+
+FLAGS
+    --is-detailed: display in detailed view
+
+OPTIONS
+    --board-name: provide name of trello board to execute on (required if board not previously set)
+```
+
+### create
+```
+trellocli create
+
+COMMANDS
+    card: create a trello card
+
+OPTIONS
+    --board-name: provide name of trello board to execute on (required if board not previously set)
+```
+
+## Use Cases
+1. Configure a trello board to execute on
+`trellocli config board`
+2. Add a new trello card
+`trellocli create card`
+![Sample output trellocli create card](misc/images/create_card.png)
+3. Display trello board data in a detailed view
+`trellocli list --is-detailed`
+![Sample output trellocli list --is-detailed](misc/images/list_detailed.png)
 
 # References
-1. [How to Create a Python CLI Program for Trello Board Management (Part 1)](https://hackernoon.com/how-to-create-a-python-cli-program-for-trello-board-management-part-1)
+1. [PyPI Release](https://pypi.org/project/trello-cli-kit/)
+2. [How to Create a Python CLI Program for Trello Board Management (Part 1)](https://hackernoon.com/how-to-create-a-python-cli-program-for-trello-board-management-part-1)
