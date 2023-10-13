@@ -1,6 +1,6 @@
 [project]
 name = "trello-cli-kit"
-version = "1.0.1"
+version = "1.0.2"
 authors = [
 	{ name = "Elaine Chan", email = "elaineyunru.chan@gmail.com" }
 ]
@@ -28,3 +28,6 @@ dependencies = [
 
 [project.scripts]
 trellocli = "trellocli.__main__:main"
+
+[tool.setuptools]
+packages = ["trellocli"]
