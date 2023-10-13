@@ -35,8 +35,8 @@ def board() -> None:
     """COMMAND to initialize Trello board"""
     try:
         # check authorization
-        res_authorize = trellojob.authorize()
-        if res_authorize.status_code != SUCCESS:
+        res_is_authorized = trellojob.is_authorized()
+        if not res_is_authorized:
             print("[bold red]Error![/] Authorization hasn't been granted. Try running `trellocli config access`")
             raise AuthorizationError
         # retrieve all boards

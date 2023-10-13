@@ -12,19 +12,13 @@ import os
 class TrelloService:
     """Class to implement the business logic needed to interact with Trello"""
     def __init__(self) -> None:
-        self.__load_oauth_token_env_var()
-        load_dotenv()
-        self.__client = TrelloClient(
-            api_key=os.getenv("TRELLO_API_KEY"),
-            api_secret=os.getenv("TRELLO_API_SECRET"),
-            token=os.getenv("TRELLO_OAUTH_TOKEN")
-        )
+        self.__client = None
 
     def __load_oauth_token_env_var(self) -> None:
         """Private method to configure user's oauth token as an environment variable"""
         load_dotenv()
         if not os.getenv("TRELLO_OAUTH_TOKEN"):
-            res = self.get_user_oauth_token()
+            res = self.__get_user_oauth_token()
             if res.status_code == SUCCESS:
                 dotenv_path = find_dotenv()
                 set_key(
@@ -35,7 +29,7 @@ class TrelloService:
             else:
                 print("User denied access.")
 
-    def get_user_oauth_token(self) -> GetOAuthTokenResponse:
+    def __get_user_oauth_token(self) -> GetOAuthTokenResponse:
         """Method to retrieve user's oauth token
 
         Returns
@@ -56,7 +50,7 @@ class TrelloService:
             )
     
     def authorize(self) -> AuthorizeResponse:
-        """Method to check if user authorized program
+        """Method to authorize program to user's trello account
         
         Returns
             AuthorizeResponse: success / error
@@ -72,6 +66,17 @@ class TrelloService:
                 token=os.getenv("TRELLO_OAUTH_TOKEN")
             )
             return AuthorizeResponse(status_code=SUCCESS)
+    
+    def is_authorized(self) -> bool:
+        """Method to check authorization to user's trello account
+        
+        Returns
+            bool: authorization to user's account
+        """
+        if not self.__client:
+            return False
+        else:
+            return True
 
     def get_all_boards(self) -> GetAllBoardsResponse:
         """Method to list all boards from user's account
