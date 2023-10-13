@@ -1,5 +1,5 @@
 __app_name__ = "trello-cli-kit"
-__version__ = "1.0.1"
+__version__ = "1.0.2"
 
 (
 	SUCCESS,
