@@ -58,10 +58,10 @@ OPTIONS
 `trellocli config board`
 2. Add a new trello card
 `trellocli create card`
-![Sample output trellocli create card](misc/images/create_card.png)
+![Sample output trellocli create card](assets/images/create_card.png)
 3. Display trello board data in a detailed view
 `trellocli list --is-detailed`
-![Sample output trellocli list --is-detailed](misc/images/list_detailed.png)
+![Sample output trellocli list --is-detailed](assets/images/list_detailed.png)
 
 # References
 1. [PyPI Release](https://pypi.org/project/trello-cli-kit/)

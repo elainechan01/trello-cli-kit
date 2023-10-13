@@ -41,8 +41,8 @@ def list(
     """
     try:
         # check authorization
-        res_authorize = trellojob.authorize()
-        if res_authorize.status_code != SUCCESS:
+        res_is_authorized = trellojob.is_authorized()
+        if not res_is_authorized:
             print("[bold red]Error![/] Authorization hasn't been granted. Try running `trellocli config access`")
             raise AuthorizationError
         # if board_name OPTION was given, attempt to retrieve board id using the name
